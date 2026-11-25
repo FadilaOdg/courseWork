@@ -5,7 +5,7 @@ pipeline{
             steps{
                 echo 'Getting source code from GitHub'
                 checkout scm
-                
+
             }
         }
         stage('Install Dependencies'){
@@ -15,13 +15,13 @@ pipeline{
                 .venv/bin/python -m pip install -r requirements.txt
                 '''
             }
-            
+
         }
         stage('Unit Tests'){
             steps{
                 sh '''
                 mkdir -p reports
-                
+
                 .venv/bin/python -m pytest \
                 --junitxml=reports/junit.xml -v
                 '''
@@ -32,7 +32,7 @@ pipeline{
                 sh '''
                 .venv/bin/python -m ruff check .
                 '''
-                
+
             }
         }
         post{
@@ -40,12 +40,4 @@ pipeline{
                 junit allowEmptyResults: true,
                     testResults: 'reports/junit.xml'
             }
-            success{
-                echo 'Jenkins CI Build succesful'
-            }
-            failure{
-                echo 'Jenkins CI Build failed'
-            }
-        }
-    }
-}
+
